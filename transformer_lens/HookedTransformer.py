@@ -618,12 +618,13 @@ class HookedTransformer(HookedRootModule):
                     attention_mask=attention_mask,
                 )  # [batch, pos, d_model]
 
+            if self.cfg.normalization_type is not None:
+                residual = self.ln_final(residual)  # [batch, pos, d_model]
+                
             if stop_at_layer is not None:
                 # When we stop at an early layer, we end here rather than doing further computation
                 return residual
-
-            if self.cfg.normalization_type is not None:
-                residual = self.ln_final(residual)  # [batch, pos, d_model]
+            
             if return_type is None:
                 return None
             else:
