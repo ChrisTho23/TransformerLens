@@ -620,7 +620,7 @@ class HookedTransformer(HookedRootModule):
 
             if self.cfg.normalization_type is not None:
                 residual = self.ln_final(residual)  # [batch, pos, d_model]
-                
+
             if stop_at_layer is not None:
                 # When we stop at an early layer, we end here rather than doing further computation
                 return residual
@@ -628,7 +628,7 @@ class HookedTransformer(HookedRootModule):
             if return_type is None:
                 return None
             else:
-                logits = self.unembed(residual)  # [batch, pos, d_vocab]
+                logits = residual # [batch, pos, d_model] self.unembed(residual)
                 if self.cfg.output_logits_soft_cap > 0.0:
                     logits = self.cfg.output_logits_soft_cap * F.tanh(
                         logits / self.cfg.output_logits_soft_cap
